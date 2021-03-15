@@ -1,0 +1,12 @@
+[package]
+name = "object-chain"
+license = "MIT"
+description = "Ad-hoc structure builder"
+version = "0.1.0"
+authors = ["Dániel Buga <bugadani@gmail.com>"]
+edition = "2018"
+categories = ["no-std", "data-structures"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
