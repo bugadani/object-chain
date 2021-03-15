@@ -1,4 +1,4 @@
-Object chain - build ad-hoc structures
+Object chain - build ad-hoc structures [![crates.io](https://img.shields.io/crates/v/object-chain.svg)](https://crates.io/crates/object-chain) [![docs.rs](https://docs.rs/object-chain/badge.svg)](https://docs.rs/object-chain/)
 ======================================
 
 Object chains are static objects whose type depends on the objects you store in them.
