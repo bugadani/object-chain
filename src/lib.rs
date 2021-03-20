@@ -19,6 +19,18 @@ mod private {
 pub trait ChainElement: private::Sealed {
     type Inner;
 
+    /// Append an object to the chain
+    #[inline]
+    fn append<T>(self, item: T) -> Link<T, Self>
+    where
+        Self: Sized,
+    {
+        Link {
+            object: item,
+            parent: self,
+        }
+    }
+
     /// Return the number of objects linked to this chain element
     fn len(&self) -> usize;
 
@@ -37,20 +49,6 @@ where
 
     /// The current object
     pub object: V,
-}
-
-impl<V, C> Link<V, C>
-where
-    C: ChainElement,
-{
-    /// Append an object to the chain
-    #[inline]
-    pub fn append<T>(self, item: T) -> Link<T, Self> {
-        Link {
-            object: item,
-            parent: self,
-        }
-    }
 }
 
 impl<V, VC> ChainElement for Link<V, VC>
@@ -83,15 +81,6 @@ impl<V> Chain<V> {
     /// Creates a new [`Chain`] by wrapping the given object.
     pub const fn new(object: V) -> Self {
         Self { object }
-    }
-
-    /// Append an object to the chain
-    #[inline]
-    pub fn append<T>(self, item: T) -> Link<T, Self> {
-        Link {
-            object: item,
-            parent: self,
-        }
     }
 }
 
