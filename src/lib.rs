@@ -40,6 +40,7 @@ pub trait ChainElement: private::Sealed {
 }
 
 /// This piece of the chain contains some object
+#[derive(Clone, Copy)]
 pub struct Link<V, C>
 where
     C: ChainElement,
@@ -72,6 +73,7 @@ where
 }
 
 /// This piece marks the end of a chain.
+#[derive(Clone, Copy)]
 pub struct Chain<V> {
     /// The wrapped object.
     pub object: V,
