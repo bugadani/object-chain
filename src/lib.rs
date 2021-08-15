@@ -18,6 +18,7 @@ mod private {
 /// A generic chain element
 pub trait ChainElement: private::Sealed {
     type Inner;
+    type Parent;
 
     /// Append an object to the chain
     #[inline]
@@ -37,6 +38,8 @@ pub trait ChainElement: private::Sealed {
     fn get(&self) -> &Self::Inner;
 
     fn get_mut(&mut self) -> &mut Self::Inner;
+
+    fn pop(self) -> (Self::Inner, Self::Parent);
 }
 
 /// This piece of the chain contains some object
@@ -57,6 +60,7 @@ where
     VC: ChainElement,
 {
     type Inner = V;
+    type Parent = VC;
 
     #[inline]
     fn len(&self) -> usize {
@@ -69,6 +73,10 @@ where
 
     fn get_mut(&mut self) -> &mut Self::Inner {
         &mut self.object
+    }
+
+    fn pop(self) -> (Self::Inner, Self::Parent) {
+        (self.object, self.parent)
     }
 }
 
@@ -88,6 +96,7 @@ impl<V> Chain<V> {
 
 impl<V> ChainElement for Chain<V> {
     type Inner = V;
+    type Parent = ();
 
     #[inline]
     fn len(&self) -> usize {
@@ -100,6 +109,10 @@ impl<V> ChainElement for Chain<V> {
 
     fn get_mut(&mut self) -> &mut Self::Inner {
         &mut self.object
+    }
+
+    fn pop(self) -> (Self::Inner, Self::Parent) {
+        (self.object, ())
     }
 }
 
@@ -196,6 +209,17 @@ mod test {
         };
 
         f(&test.chain);
+
+        let chain = test.chain;
+        let (obj, chain) = chain.pop();
+        assert_eq!(obj, 2u32);
+
+        let (obj, chain) = chain.pop();
+        assert_eq!(obj, 1u16);
+
+        let (obj, chain) = chain.pop();
+        assert_eq!(obj, 0u8);
+        assert_eq!(chain, ());
     }
 
     #[test]
