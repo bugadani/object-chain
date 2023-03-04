@@ -254,7 +254,7 @@ mod test {
 
         impl<T: AsU8> ReadableAsU8 for Chain<T> {
             fn read_from(&self, index: usize) -> &dyn AsU8 {
-                assert!(index == 0, "Out of bounds access!");
+                assert_eq!(index, 0, "Out of bounds access!");
                 &self.object
             }
         }
@@ -264,7 +264,7 @@ mod test {
                 if index == self.len() - 1 {
                     &self.object
                 } else {
-                    self.parent.read_from(index - 1)
+                    self.parent.read_from(index)
                 }
             }
         }
@@ -272,9 +272,12 @@ mod test {
         // Through the accessor interface we can access any of our objects, but only through the
         // common interface we defined in step 1.
         fn do_test(obj_chain: &impl ReadableAsU8) {
+            assert_eq!(1, obj_chain.read_from(0).as_u8());
             assert_eq!(2, obj_chain.read_from(1).as_u8());
+            assert_eq!(3, obj_chain.read_from(2).as_u8());
         }
 
-        do_test(&Chain::new(1u8).append(2u16));
+        do_test(&Chain::new(1u8).append(2u16).append(3u16));
+
     }
 }
