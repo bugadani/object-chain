@@ -16,6 +16,7 @@ mod private {
 }
 
 /// A generic chain element
+#[allow(clippy::len_without_is_empty)]
 pub trait ChainElement: private::Sealed {
     type Inner;
     type Parent;
@@ -278,6 +279,5 @@ mod test {
         }
 
         do_test(&Chain::new(1u8).append(2u16).append(3u16));
-
     }
 }
